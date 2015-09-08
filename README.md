@@ -31,9 +31,9 @@ Copy the config.py.sample to config.py and fill your gitlab and trello info.
 (2) create the gitlab webhook
 -----------------------------
 
-In gitlab, as admin, go to "Hooks" tab, create hook as: http://your.ip.goes.here:8000
+In gitlab, as admin, go to "Hooks" tab, create hook as: http://your.ip.goes.here:9000
 
-or change the port on line 175 of the script.
+or change the port on line 113 of the script.
 
 (3) Optional init script
 ------------------------

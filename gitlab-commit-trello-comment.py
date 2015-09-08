@@ -87,22 +87,23 @@ class webhookReceiver(BaseHTTPRequestHandler):
         namespace = (urlsplit(post['repository']['homepage'])[2]).split('/')[1]
         namespace = ''.join(('/', namespace)) if namespace else namespace
         repo_url = ''.join((config.gitlab_url, namespace, '/', repo))
-        branch = re.split('/', post['ref'])[-1]
+        branch = re.findall('heads/(.+)', post['ref'])[0]
         branch_url = repo_url + '/commits/%s' % branch
         log.debug(pprint.pformat(post))
         
         for commit in post['commits']:
-            card_short_id_list = map(int, re.findall('#([1-9]+)', commit['message']))
+            card_short_id_list = map(int, re.findall('#([0-9]+)', commit['message']))
+            log.debug(card_short_id_list);
             git_hash = commit['id'][:7]
             git_hash_url = repo_url + '/commit/%s' % git_hash
             author = commit['author']['name']
-            comment = commit['message']
+            comment = commit['message'].replace('#',':hash:')
             trello_comment = '''\[**%s** has a new commit about this card\]
 \[repo: [%s](%s) | branch: [%s](%s) | hash: [%s](%s)\]
 ----
 %s''' % (author, repo, repo_url, branch, branch_url, git_hash, git_hash_url, comment)
             for card_short_id in card_short_id_list:
-                self.comment_to_trello(card_short_id, trello_comment)
+                self.comment_to_trello(card_short_id, trello_comment.encode('utf8'))
 
 def main():
     """
