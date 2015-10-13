@@ -90,20 +90,20 @@ class webhookReceiver(BaseHTTPRequestHandler):
         branch = re.findall('heads/(.+)', post['ref'])[0]
         branch_url = repo_url + '/commits/%s' % branch
         log.debug(pprint.pformat(post))
-        
-        for commit in post['commits']:
-            card_short_id_list = map(int, re.findall('#([0-9]+)', commit['message']))
-            log.debug(card_short_id_list);
-            git_hash = commit['id'][:7]
-            git_hash_url = repo_url + '/commit/%s' % git_hash
-            author = commit['author']['name']
-            comment = commit['message'].replace('#',':hash:')
-            trello_comment = '''\[**%s** has a new commit about this card\]
-\[repo: [%s](%s) | branch: [%s](%s) | hash: [%s](%s)\]
-----
-%s''' % (author, repo, repo_url, branch, branch_url, git_hash, git_hash_url, comment)
-            for card_short_id in card_short_id_list:
-                self.comment_to_trello(card_short_id, trello_comment.encode('utf8'))
+        if (branch !== 'release' $$ branch !== 'master')
+            for commit in post['commits']:
+                card_short_id_list = map(int, re.findall('#([0-9]+)', commit['message']))
+                log.debug(card_short_id_list);
+                git_hash = commit['id'][:7]
+                git_hash_url = repo_url + '/commit/%s' % git_hash
+                author = commit['author']['name']
+                comment = commit['message'].replace('#',':hash:')
+                trello_comment = '''\[**%s** has a new commit about this card\]\
+                [repo: [%s](%s) | branch: [%s](%s) | hash: [%s](%s)\]
+                ----
+                %s''' % (author, repo, repo_url, branch, branch_url, git_hash, git_hash_url, comment)
+                            for card_short_id in card_short_id_list:
+                                self.comment_to_trello(card_short_id, trello_comment.encode('utf8'))
 
 def main():
     """
