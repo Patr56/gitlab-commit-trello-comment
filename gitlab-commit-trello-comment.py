@@ -90,7 +90,7 @@ class webhookReceiver(BaseHTTPRequestHandler):
         branch = re.findall('heads/(.+)', post['ref'])[0]
         branch_url = repo_url + '/commits/%s' % branch
         log.debug(pprint.pformat(post))
-        if branch != 'release' and branch != 'master' and branch != 'develop'
+        if branch != 'release' and branch != 'master' and branch != 'develop':
             for commit in post['commits']:
                 card_short_id_list = map(int, re.findall('#([0-9]+)', commit['message']))
                 log.debug(card_short_id_list);
