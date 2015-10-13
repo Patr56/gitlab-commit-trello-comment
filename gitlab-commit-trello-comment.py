@@ -99,11 +99,11 @@ class webhookReceiver(BaseHTTPRequestHandler):
                 author = commit['author']['name']
                 comment = commit['message'].replace('#',':hash:')
                 trello_comment = '''\[**%s** has a new commit about this card\]\
-                [repo: [%s](%s) | branch: [%s](%s) | hash: [%s](%s)\]
-                ----
-                %s''' % (author, repo, repo_url, branch, branch_url, git_hash, git_hash_url, comment)
-                            for card_short_id in card_short_id_list:
-                                self.comment_to_trello(card_short_id, trello_comment.encode('utf8'))
+[repo: [%s](%s) | branch: [%s](%s) | hash: [%s](%s)\]
+----
+%s''' % (author, repo, repo_url, branch, branch_url, git_hash, git_hash_url, comment)
+                for card_short_id in card_short_id_list:
+                    self.comment_to_trello(card_short_id, trello_comment.encode('utf8'))
 
 def main():
     """
